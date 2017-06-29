@@ -5,6 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Field" Height="300" Width="300" KeyDown="Window_KeyDown">
-    <Grid Name="MainGrid"/>
+        Title="Поле" Height="400" Width="550" KeyDown="Window_KeyDown" WindowStyle="ToolWindow">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Name="MainGrid"/>
+        <Grid Grid.Column="2" Background="DarkGray">
+            <StackPanel Margin="25">
+                <Label Content="Алгоритм" HorizontalAlignment="Center" Height="25"/>
+                <ComboBox Name ="AlgoBox" Height="25"/>
+                <Button Name ="Start"  Content="Запустить" Height="25" Click="Start_Click"/>
+
+                <Label Content="Режим" HorizontalAlignment="Center" Height="25" Margin="0,50,0,0"/>
+                <Button Name ="Mod"  Content="Пошагово Выкл." Height="25"/>
+                <Button Name ="Step"  Content="Шаг" Height="25" Click="Step_Click"/>
+
+                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Margin="0,75,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
 </Window>

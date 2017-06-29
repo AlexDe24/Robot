@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Robot.Logic;
+//using System.Timers;
+using System.Threading;
 
 namespace Robot.Form
 {
@@ -19,19 +14,51 @@ namespace Robot.Form
     /// </summary>
     public partial class Field : Window
     {
-        Color blackColor;
-        Color WhiteColor;
+        TimerCallback timeCB;
+        Timer stepsTimer;
 
-        Button[,] image;
-        Button btn;
-        int startRow;
-        int startColumn;
+        FileClass fileWork;
+        AlgSettings settings;
+        Action act;
+
+        Color blackColor;
+        Color whiteColor;
+        Color robotColor;
+
+        Grid[,] imageGrid;
+        Grid robot;
+
+        int _countGrid;
+
+        int[] _startRowColumn;
+
+        public delegate void InvokeDelegate();
 
         public Field()
         {
             InitializeComponent();
 
+            timeCB = new TimerCallback(TimerTick);
+
+            stepsTimer = new Timer(timeCB,null,0,100);
+
+            fileWork = new FileClass();
+            settings = new AlgSettings();
+            act = new Action();
+
+            _countGrid = 15;
+
+            _startRowColumn = new int[2];
+
             blackColor = new Color()
+            {
+                A = 200,
+                R = 0,
+                G = 0,
+                B = 0
+            };
+
+            whiteColor = new Color()
             {
                 A = 0,
                 R = 100,
@@ -39,20 +66,25 @@ namespace Robot.Form
                 B = 100
             };
 
-            WhiteColor = new Color()
+            robotColor = new Color()
             {
-                A = 100,
-                R = 100,
-                G = 100,
-                B = 100
+                A = 200,
+                R = 130,
+                G = 130,
+                B = 180
             };
 
-            image = new Button[200,200];
+            CreateField();
+        }
 
-            startRow = 0;
-            startColumn = 0;
+        void CreateField()
+        {
+            MainGrid.Children.Clear();
 
-            for (int i = 0; i < 15; i++)
+            imageGrid = new Grid[100, 100];
+            robot = new Grid();
+
+            for (int i = 0; i < _countGrid; i++)
             {
                 RowDefinition rd = new RowDefinition();
                 ColumnDefinition cd = new ColumnDefinition();
@@ -61,52 +93,65 @@ namespace Robot.Form
                 MainGrid.ColumnDefinitions.Add(cd);
             }
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < _countGrid; i++)
             {
-                for (int j = 0; j < 15; j++)
+                for (int j = 0; j < _countGrid; j++)
                 {
-                    image[i,j].Background = new SolidColorBrush(WhiteColor);
+                    Grid bton = new Grid();
 
-                    MainGrid.Children.Add(image[0, 0]);
-                    MainGrid.Children.Add(image[i, j]);
+                    bton.Background = new SolidColorBrush(whiteColor);
 
-                    Grid.SetRow(image[i, j], i);
-                    Grid.SetColumn(image[i, j], j);
+                    MainGrid.Children.Add(bton);
+
+                    Grid.SetRow(bton, i);
+                    Grid.SetColumn(bton, j);
+
+                    imageGrid[i, j] = bton;
                 }
             }
-            
-            btn = new Button();
 
-            MainGrid.Children.Add(btn);
+            for (int i = 0; i < _countGrid; i++)
+            {
+                imageGrid[0, i].Background = new SolidColorBrush(blackColor);
+                imageGrid[_countGrid - 1, i].Background = new SolidColorBrush(blackColor);
+
+                imageGrid[i, 0].Background = new SolidColorBrush(blackColor);
+                imageGrid[i, _countGrid - 1].Background = new SolidColorBrush(blackColor);
+            }
+
+            robot.Background = new SolidColorBrush(robotColor);
+
+            MainGrid.Children.Add(robot);
+        }
+
+        void TimerTick(object state)
+        {
+            InvokeDelegate handler = new InvokeDelegate(InvokeMethod);
+            handler.BeginInvoke(null,null);
+            //_startRow = act.Move(_startRow);
+            //Grid.SetRow(robot, _startRow);
+        }
+
+        public void InvokeMethod()
+        {
+            _startRowColumn = act.Move(_startRowColumn,_countGrid, settings.commands);
+            Grid.SetRow(robot, _startRowColumn[0]);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            image[startRow, startColumn].Background = new SolidColorBrush(blackColor);
 
-            switch (e.Key)
-            {
-                case Key.Down:
-                    if (startRow < 15)
-                        startRow++;
-                    break;
-                case Key.Up:
-                    if (startRow > 0)
-                        startRow--;
-                    break;
-                case Key.Left:
-                    if (startColumn > 0)
-                        startColumn--;
-                    break;
-                case Key.Right:
-                    if (startColumn < 15)
-                        startColumn++;
-                    break;
-                default:
-                    break;
-            }
-            Grid.SetRow(btn, startRow);
-            Grid.SetColumn(btn, startColumn);
+        }
+
+        private void Start_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Step_Click(object sender, RoutedEventArgs e)
+        {
+            Grid.SetRow(robot, _startRowColumn[0]);
+            Grid.SetColumn(robot, _startRowColumn[1]);
         }
     }
 }

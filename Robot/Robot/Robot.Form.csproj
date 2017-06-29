@@ -94,5 +94,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Robot.Logic\Robot.Logic.csproj">
+      <Project>{2c8d1141-cbe2-47d3-a593-9e54d770f18d}</Project>
+      <Name>Robot.Logic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
