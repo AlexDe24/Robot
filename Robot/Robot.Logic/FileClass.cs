@@ -6,7 +6,7 @@ namespace Robot.Logic
 {
     public class FileClass
     {
-        public AlgSettings Read()
+        public AlgSettings ReadAlgoritm()
         {
             AlgSettings settings = new AlgSettings();
 
@@ -14,20 +14,25 @@ namespace Robot.Logic
 
             for (int i = 0; i < dirs.Length; i++)
             {
-                StreamReader read = new StreamReader(dirs[i]);
+                StreamReader read = new StreamReader(dirs[i], System.Text.Encoding.Default);
 
-                settings.countGrid = read.Read();
-                settings.startRow = read.Read();
-                settings.startColumn = read.Read();
+                string[] sp = read.ReadLine().Split('|');
+
+                settings.countGrid = Convert.ToInt32(sp[0]);
+                settings.row = Convert.ToInt32(sp[1]);
+                settings.column = Convert.ToInt32(sp[2]);
+                settings.rotate = Convert.ToInt32(sp[3]);
 
                 while (!read.EndOfStream)
                 {
+                    string[] spli = read.ReadLine().Split('|');
+
                     settings.commands.Add(new Commands
                     {
-                        nom = read.Read(),
-                        name = Convert.ToString(read.Read()),
-                        firstArg = read.Read(),
-                        secondArg = read.Read()
+                        nom = Convert.ToInt32(spli[0]),
+                        name = spli[1],
+                        firstArg = Convert.ToInt32(spli[2]),
+                        secondArg = Convert.ToInt32(spli[3])
                     });
                 }
 

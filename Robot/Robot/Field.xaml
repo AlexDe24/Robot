@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Поле" Height="400" Width="550" KeyDown="Window_KeyDown" WindowStyle="ToolWindow">
+        Title="Поле" Height="400" Width="550" WindowStyle="ToolWindow">
     <Grid>
 
         <Grid.ColumnDefinitions>
