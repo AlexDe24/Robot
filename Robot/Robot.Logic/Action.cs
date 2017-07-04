@@ -8,6 +8,10 @@ namespace Robot.Logic
 {
     public class Action
     {
+        FieldSettings _settings;
+        List<Commands> _commands;
+        RobotSettings _robot;
+
         /// <summary>
         /// Функция для передвижения робота
         /// </summary>
@@ -15,48 +19,60 @@ namespace Robot.Logic
         /// <param name="countGrid">количество строк</param>
         /// <param name="commands">комманды</param>
         /// <returns></returns>
-        public int Move(AlgSettings settings, int step, int[,] colorList)
+        public int Move(int step, AlgorithmSettings algorithm)
         {
-            switch (settings.commands[step].name)
+            _settings = algorithm.field;
+            _commands = algorithm.commands;
+            _robot = algorithm.robot;
+
+            switch (_commands[step].name)
             {
                 case "Движение":
-                    if (settings.rotate == 0 && settings.column < settings.countGrid)
-                        settings.column += settings.commands[step].firstArg;
-                    else if (settings.rotate == 90 && settings.row > 0)
-                        settings.row -= settings.commands[step].firstArg;
-                    else if (settings.rotate == 180 && settings.column > 0)
-                        settings.column -= settings.commands[step].firstArg;
-                    else if (settings.rotate == 270 && settings.row < settings.countGrid)
-                        settings.row += settings.commands[step].firstArg;
+                    if (_robot.rotate == 0 && _robot.column < _settings.countGrid)
+                        _robot.column += _commands[step].firstArg;
+                    else if (_robot.rotate == 90 && _robot.row > 0)
+                        _robot.row -= _commands[step].firstArg;
+                    else if (_robot.rotate == 180 && _robot.column > 0)
+                        _robot.column -= _commands[step].firstArg;
+                    else if (_robot.rotate == 270 && _robot.row < _settings.countGrid)
+                        _robot.row += _commands[step].firstArg;
                     break;
                 case "Поворот":
-                    if (settings.commands[step].firstArg == 1)
+                    if (_commands[step].firstArg == 1)
                     {
-                        if (settings.rotate == 0)
-                            settings.rotate = 90;
-                        else if (settings.rotate == 90)
-                            settings.rotate = 180;
-                        else if (settings.rotate == 180)
-                            settings.rotate = 270;
-                        else if (settings.rotate == 270)
-                            settings.rotate = 0;
+                        if (_robot.rotate == 0)
+                            _robot.rotate = 90;
+                        else if (_robot.rotate == 90)
+                            _robot.rotate = 180;
+                        else if (_robot.rotate == 180)
+                            _robot.rotate = 270;
+                        else if (_robot.rotate == 270)
+                            _robot.rotate = 0;
                     }
-                    else if (settings.commands[step].firstArg == 0)
+                    else if (_commands[step].firstArg == 0)
                     {
-                        if (settings.rotate == 90)
-                            settings.rotate = 0;
-                        else if (settings.rotate == 180)
-                            settings.rotate = 90;
-                        else if (settings.rotate == 270)
-                            settings.rotate = 180;
-                        else if (settings.rotate == 0)
-                            settings.rotate = 270;
+                        if (_robot.rotate == 90)
+                            _robot.rotate = 0;
+                        else if (_robot.rotate == 180)
+                            _robot.rotate = 90;
+                        else if (_robot.rotate == 270)
+                            _robot.rotate = 180;
+                        else if (_robot.rotate == 0)
+                            _robot.rotate = 270;
                     }
                     break;
+                case "Заливка":
+                    _settings.colorList[_robot.row, _robot.column] = _commands[step].firstArg;
+                    break;
+                case "Изучение":
+                    if (_settings.colorList[_robot.row, _robot.column] == 0)
+                        return _commands[step].firstArg;
+                    else
+                        return _commands[step].secondArg;
                 default:
                     break;
             }
-            return settings.commands[step].secondArg;
+            return _commands[step].secondArg;
         }
     }
 }

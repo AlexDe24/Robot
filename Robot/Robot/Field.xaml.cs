@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Robot.Logic;
-//using System.Timers;
 using System.Threading;
+using System.Linq;
+using Robot.Logic;
 
 namespace Robot.Form
 {
@@ -17,21 +17,19 @@ namespace Robot.Form
         TimerCallback _timeCB;
         Timer _stepTimer;
 
+        List<AlgorithmSettings> _algorithms;
+        AlgorithmSettings _algorithmNow;
+
         FileClass _fileWork;
-        AlgSettings _settings;
         Action _action;
+        CreateAlg _createAlg;
 
         Color _blackColor;
         Color _whiteColor;
         Color _robotColor;
 
-        int[,] _colorList;
         Grid[,] _colorGrid;
-        Grid _robot;
-
-        int _countGrid;
-
-        int[] _rowColumn;
+        Grid _robotGrid;
 
         int _step;
 
@@ -42,13 +40,12 @@ namespace Robot.Form
             InitializeComponent();
 
             _timeCB = new TimerCallback(TimerTick); //функция таймера
-            _stepTimer = new Timer(TimerTick, null, 100, 700); //таймер
-
-            _rowColumn = new int[2];
+            _stepTimer = new Timer(TimerTick, null, 0, 1); //таймер
 
             _fileWork = new FileClass(); //класс работы с файлами
-            _settings = new AlgSettings(); //класс настроек 
             _action = new Action(); //класс управления
+
+            UpdateAlgoBox();
 
             _blackColor = new Color()
             {
@@ -74,25 +71,34 @@ namespace Robot.Form
                 B = 180
             };
 
-            _colorList = new int[100, 100];
             isTimer = false;
-            _step = 0;
+        }
 
-            _settings = _fileWork.ReadAlgoritm();
+        void UpdateAlgoBox()
+        {
+            _algorithms = new List<AlgorithmSettings>();
+            _algorithms = _fileWork.Readalgorithms();
 
-            _countGrid = _settings.countGrid; 
+            AlgoBox.Items.Clear();
 
-            CreateField();
+            for (int i = 0; i < _algorithms.Count; i++)
+            {
+                AlgoBox.Items.Add(_algorithms[i].algName);
+            }
         }
 
         void CreateField()
         {
             MainGrid.Children.Clear();
+            MainGrid.ColumnDefinitions.Clear();
+            MainGrid.RowDefinitions.Clear();
+
+            _step = 0;
 
             _colorGrid = new Grid[100, 100];
-            _robot = new Grid();
+            _robotGrid = new Grid();
 
-            for (int i = 0; i < _countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
             {
                 RowDefinition rd = new RowDefinition();
                 ColumnDefinition cd = new ColumnDefinition();
@@ -101,9 +107,9 @@ namespace Robot.Form
                 MainGrid.ColumnDefinitions.Add(cd);
             }
 
-            for (int i = 0; i < _countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
             {
-                for (int j = 0; j < _countGrid; j++)
+                for (int j = 0; j < _algorithmNow.field.countGrid; j++)
                 {
                     Grid bton = new Grid();
 
@@ -114,27 +120,27 @@ namespace Robot.Form
                     Grid.SetRow(bton, i);
                     Grid.SetColumn(bton, j);
 
-                    _colorList[i, j] = 0;
+                    _algorithmNow.field.colorList[i, j] = 0;
                     _colorGrid[i, j] = bton;
                 }
             }
 
-            for (int i = 0; i < _countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
             {
-                _colorList[0, i] = 1;
-                _colorList[_countGrid - 1, i] = 1;
+                _algorithmNow.field.colorList[0, i] = 1;
+                _algorithmNow.field.colorList[_algorithmNow.field.countGrid - 1, i] = 1;
                 _colorGrid[0, i].Background = new SolidColorBrush(_blackColor);
-                _colorGrid[_countGrid - 1, i].Background = new SolidColorBrush(_blackColor);
+                _colorGrid[_algorithmNow.field.countGrid - 1, i].Background = new SolidColorBrush(_blackColor);
 
-                _colorList[i, 0] = 1;
-                _colorList[i, _countGrid - 1] = 1;
+                _algorithmNow.field.colorList[i, 0] = 1;
+                _algorithmNow.field.colorList[i, _algorithmNow.field.countGrid - 1] = 1;
                 _colorGrid[i, 0].Background = new SolidColorBrush(_blackColor);
-                _colorGrid[i, _countGrid - 1].Background = new SolidColorBrush(_blackColor);
+                _colorGrid[i, _algorithmNow.field.countGrid - 1].Background = new SolidColorBrush(_blackColor);
             }
 
-            _robot.Background = new SolidColorBrush(_robotColor);
+            _robotGrid.Background = new SolidColorBrush(_robotColor);
 
-            MainGrid.Children.Add(_robot);
+            MainGrid.Children.Add(_robotGrid);
         }
 
         void TimerTick(object state)
@@ -143,26 +149,95 @@ namespace Robot.Form
             {
                 Dispatcher.BeginInvoke(new ThreadStart(delegate
                 {
-                    Grid.SetRow(_robot, _settings.row);
-                    Grid.SetColumn(_robot, _settings.column);
+                    RobotActive();
                 }));
-                
-                _step = _action.Move(_settings, _step, _colorList);
             }
         }
 
-
         private void Step_Click(object sender, RoutedEventArgs e)
         {
-            Grid.SetRow(_robot, _settings.row);
-            Grid.SetColumn(_robot, _settings.column);
-
-            _step = _action.Move(_settings, _step, _colorList);
+            RobotActive();
         }
 
+        void RobotActive()
+        {
+            if (_step >= 0)
+            {
+                Grid.SetRow(_robotGrid, _algorithmNow.robot.row);
+                Grid.SetColumn(_robotGrid, _algorithmNow.robot.column);
+
+                for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+                {
+                    for (int j = 0; j < _algorithmNow.field.countGrid; j++)
+                    {
+                        if (_algorithmNow.field.colorList[i, j] == 0)
+                        {
+                            _colorGrid[i, j].Background = new SolidColorBrush(_whiteColor);
+                        }
+                        else
+                            _colorGrid[i, j].Background = new SolidColorBrush(_blackColor);
+                    }
+                }
+
+                _step = _action.Move(_step, _algorithmNow);
+            }
+            else 
+            {
+                isTimer = false;
+                MessageBox.Show("Алгоритм завершён.");
+            }
+            
+        }
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            isTimer = true;
+
+            if (AlgoBox.SelectedIndex != -1)
+            {
+                int k = AlgoBox.SelectedIndex;
+
+                UpdateAlgoBox();
+
+                AlgoBox.SelectedIndex = k;
+
+                _algorithmNow = _algorithms.Where(x => x.algName == AlgoBox.Items[k]).First();
+
+                Mod.IsEnabled = true;
+                Step.IsEnabled = true;
+                isTimer = false;
+
+                CreateField();
+            }
+        }
+
+        private void Mod_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (isTimer == true)
+            {
+                isTimer = false;
+                Mod.Content = "Пошагово Вкл.";
+            }
+            else if (isTimer == false)
+            {
+                isTimer = true;
+                Mod.Content = "Пошагово Выкл.";
+                }
+        }
+
+        private void AlgoCreate_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> algNames = new List<string>();
+
+            for (int i = 0; i < _algorithms.Count; i++)
+            {
+                algNames.Add(_algorithms[i].algName);
+            }
+                
+            _createAlg = new CreateAlg(_fileWork, algNames);
+
+            _createAlg.ShowDialog();
+
+            UpdateAlgoBox();
         }
     }
 }

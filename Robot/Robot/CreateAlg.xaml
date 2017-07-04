@@ -1,0 +1,64 @@
+﻿<Window x:Class="Robot.Form.CreateAlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Robot.Form"
+        mc:Ignorable="d"
+        Title="Создание алгоритма" Height="420" Width="680" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.RowSpan="3" Grid.Column="2" Margin="15" VerticalAlignment="Center">
+
+            <Button Template="{DynamicResource ButtonOwal}" Name="AddCom" Height="25" VerticalAlignment="Top" Content="Добавить команду" Width="120" Click="AddCom_Click"/>
+            <Button Template="{DynamicResource ButtonOwal}" Name="DelCom"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Удалить команду" Width="120" Click="DelCom_Click"/>
+      
+            <StackPanel Width="150">
+                <Label Content="Название алгоритма" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="AlgName"/>
+                
+                <Label Content="Размер поля" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="FieldSize"/>
+
+                <Label Content="Положение робота по Y" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="RoborRow"/>
+
+                <Label Content="Положение робота по X" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="RoborColumn"/>
+
+                <Label Content="Поворот робота" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="RoborRotate"/>
+            </StackPanel>
+            
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Width="420" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,0">
+            <Label Content="Номер команды" Width="105"/>
+            <Label Content="Команда" Width="95"/>
+            <Label Content="Первый аргумент" Width="110"/>
+            <Label Content="Второй аргумент" Width="110"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+            <ListBox Name="AlgBox"/>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Template="{DynamicResource ButtonOwal}" Name="Save"  Height="25" VerticalAlignment="Top"  Content="Сохранить алгоритм" Width="120" Click="Save_Click"/>
+            <Button Template="{DynamicResource ButtonOwal}" Name="Load"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Удалить алгоритм" Width="120"/>
+            <Button Template="{DynamicResource ButtonOwal}" Name="Del"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Загрузить алгоритм" Width="120"/>
+
+        </StackPanel>
+        
+    </Grid>
+</Window>

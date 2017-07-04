@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Поле" Height="400" Width="550" WindowStyle="ToolWindow">
+        Title="Поле" Height="400" Width="550" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -20,10 +20,10 @@
                 <Button Name ="Start"  Content="Запустить" Height="25" Click="Start_Click"/>
 
                 <Label Content="Режим" HorizontalAlignment="Center" Height="25" Margin="0,50,0,0"/>
-                <Button Name ="Mod"  Content="Пошагово Выкл." Height="25"/>
-                <Button Name ="Step"  Content="Шаг" Height="25" Click="Step_Click"/>
+                <Button Name ="Mod"  Content="Пошагово Вкл." Height="25" Click="Mod_Click" IsEnabled="False"/>
+                <Button Name ="Step"  Content="Шаг" Height="25" Click="Step_Click" IsEnabled="False"/>
 
-                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Margin="0,75,0,0"/>
+                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Margin="0,75,0,0" Click="AlgoCreate_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

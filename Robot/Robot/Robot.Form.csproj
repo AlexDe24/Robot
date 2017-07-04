@@ -60,6 +60,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateAlg.xaml.cs">
+      <DependentUpon>CreateAlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Field.xaml.cs">
       <DependentUpon>Field.xaml</DependentUpon>
     </Compile>
@@ -89,6 +92,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CreateAlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Field.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -4,6 +4,22 @@
              xmlns:local="clr-namespace:Robot"
              StartupUri="Field.xaml">
     <Application.Resources>
-         
+        
+        <ControlTemplate x:Key="ButtonOwal" TargetType="{x:Type Button}">
+            <Grid x:Name="controlLayout">
+                <Rectangle  x:Name="buttonSurface" RadiusX="5" RadiusY="5" Fill="White" Stroke="Black"/>
+                <ContentPresenter x:Name="buttonCaption" VerticalAlignment="Center"
+                    HorizontalAlignment="Center" ></ContentPresenter>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="buttonSurface" Property="Fill" Value="LightSkyBlue" ></Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="buttonSurface" Property="Fill" Value="DeepSkyBlue" ></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
     </Application.Resources>
 </Application>
