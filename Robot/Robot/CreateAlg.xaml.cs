@@ -23,54 +23,96 @@ namespace Robot.Form
         FileClass _fileWork;
         AlgorithmSettings _algorithm;
 
-        List<string> _algNames;
-        public CreateAlg(FileClass fileWork, List<string> algNames)
+        List<AlgorithmSettings> _algorithms;
+
+        public CreateAlg(FileClass fileWork)
         {
             InitializeComponent();
 
-            _algNames = algNames;
+            _fileWork = fileWork;
+
+            _algorithms = _fileWork.Readalgorithms();
 
             _algorithm = new AlgorithmSettings();
-            _fileWork = fileWork;
+
+            RoborRotate.Items.Add("0");
+            RoborRotate.Items.Add("90");
+            RoborRotate.Items.Add("180");
+            RoborRotate.Items.Add("270");
+
+            for (int i = 0; i < _algorithms.Count; i++)
+            {
+                AlgBox.Items.Add(_algorithms[i].algName);
+            }
         }
 
-        StackPanel AddCommand()
+        StackPanel AddCommand(string name, string firsArg, string secondArg)
         {
-            TextBox CommandNom = new TextBox()
-            {
-                Text = Convert.ToString(AlgBox.Items.Count),
-                IsEnabled = false,
-                Height = 25,
-                Width = 105,
-                ToolTip = "Номер команды"
-            };
-
             ComboBox CommandName = new ComboBox()
             {
                 Height = 25,
                 Width = 95,
                 SelectedIndex = 0,
-                ToolTip = "Движение вперёд"                
             };
+
             CommandName.SelectionChanged += SelectionChanged;
             CommandName.Items.Add("Движение");
             CommandName.Items.Add("Поворот");
             CommandName.Items.Add("Заливка");
             CommandName.Items.Add("Изучение");
 
-            TextBox CommandFirstArg = new TextBox()
+            
+            TextBox CommandNom = new TextBox()
             {
+                Text = Convert.ToString(AlgList.Items.Count),
+                IsEnabled = false,
                 Height = 25,
                 Width = 105,
-                ToolTip = "Количество клеток"
+            };
+
+            TextBox CommandFirstArg = new TextBox()
+            {
+                Text = firsArg,
+                Height = 25,
+                Width = 105,
             };
 
             TextBox CommandSecondArg = new TextBox()
             {
+                Text = secondArg,
                 Height = 25,
                 Width = 105,
-                ToolTip = "Номер следующей команды"
             };
+
+            switch (name)
+            {
+                case "Движение":
+                    CommandName.SelectedIndex = 0;
+                    CommandName.ToolTip = "Движение вперёд";
+                    CommandFirstArg.ToolTip = "Количество клеток";
+                    CommandSecondArg.ToolTip = "Номер следующей команды";
+                    break;
+                case "Поворот":
+                    CommandName.SelectedIndex = 1;
+                    CommandName.ToolTip = "Поворот";
+                    CommandFirstArg.ToolTip = "Направление поворота 1 – налево 0 – направо";
+                    CommandSecondArg.ToolTip = "Номер следующей команды";
+                    break;
+                case "Заливка":
+                    CommandName.SelectedIndex = 2;
+                    CommandName.ToolTip = "Закрашивание ячейки";
+                    CommandFirstArg.ToolTip = "Цвет ячейки 1 – черный 0 – белый";
+                    CommandSecondArg.ToolTip = "Номер следующей команды";
+                    break;
+                case "Изучение":
+                    CommandName.SelectedIndex = 3;
+                    CommandName.ToolTip = "Выбор действия в зависимости от цвета блока";
+                    CommandFirstArg.ToolTip = "Номер команды, если текущая ячейка белая";
+                    CommandSecondArg.ToolTip = "Номер команды, если текущая ячейка чёрная";
+                    break;
+                default:
+                    break;
+            }
 
             StackPanel Command = new StackPanel()
             {
@@ -88,26 +130,33 @@ namespace Robot.Form
 
         private void AddCom_Click(object sender, RoutedEventArgs e)
         {
-            AlgBox.Items.Add(AddCommand());
+            AlgList.Items.Add(AddCommand("Движение", null,null));
         }
 
         private void DelCom_Click(object sender, RoutedEventArgs e)
         {
-            if (AlgBox.SelectedIndex != -1)
+            if (AlgList.SelectedIndex != -1)
             {
-                AlgBox.Items.RemoveAt(AlgBox.SelectedIndex);
+                AlgList.Items.RemoveAt(AlgList.SelectedIndex);
+
+                for (int i = 0; i < AlgList.Items.Count; i++)
+                {
+                    TextBox CommandNom = ((AlgList.Items[i] as StackPanel).Children[0] as TextBox);
+
+                    CommandNom.Text = Convert.ToString(i);
+                }
             }
         }
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (AlgBox.Items.Count != 0)
+            if (AlgList.Items.Count != 0)
             {
-                for (int i = 0; i < AlgBox.Items.Count; i++)
+                for (int i = 0; i < AlgList.Items.Count; i++)
                 {
-                    ComboBox CommandName = ((AlgBox.Items[i] as StackPanel).Children[1] as ComboBox);
-                    TextBox CommandFirstArg = ((AlgBox.Items[i] as StackPanel).Children[2] as TextBox);
-                    TextBox CommandSecondArg = ((AlgBox.Items[i] as StackPanel).Children[3] as TextBox);
+                    ComboBox CommandName = ((AlgList.Items[i] as StackPanel).Children[1] as ComboBox);
+                    TextBox CommandFirstArg = ((AlgList.Items[i] as StackPanel).Children[2] as TextBox);
+                    TextBox CommandSecondArg = ((AlgList.Items[i] as StackPanel).Children[3] as TextBox);
 
                     switch (CommandName.Items[CommandName.SelectedIndex])
                     {
@@ -144,14 +193,16 @@ namespace Robot.Form
 
             try
             {
-                for (int i = 0; i < AlgBox.Items.Count; i++)
+                _algorithm.commands.Clear();
+
+                for (int i = 0; i < AlgList.Items.Count; i++)
                 {
                     _algorithm.commands.Add(new Commands
                     {
-                        nom = Convert.ToInt32(((AlgBox.Items[i] as StackPanel).Children[0] as TextBox).Text),
-                        name = ((AlgBox.Items[i] as StackPanel).Children[1] as ComboBox).Text,
-                        firstArg = Convert.ToInt32(((AlgBox.Items[i] as StackPanel).Children[2] as TextBox).Text),
-                        secondArg = Convert.ToInt32(((AlgBox.Items[i] as StackPanel).Children[3] as TextBox).Text)
+                        nom = Convert.ToInt32(((AlgList.Items[i] as StackPanel).Children[0] as TextBox).Text),
+                        name = ((AlgList.Items[i] as StackPanel).Children[1] as ComboBox).Text,
+                        firstArg = Convert.ToInt32(((AlgList.Items[i] as StackPanel).Children[2] as TextBox).Text),
+                        secondArg = Convert.ToInt32(((AlgList.Items[i] as StackPanel).Children[3] as TextBox).Text)
                     });
                 }
 
@@ -174,7 +225,14 @@ namespace Robot.Form
             }
             else
             {
-                if (_algNames.Any(x => x == AlgName.Text))
+                if (AlgBox.SelectedIndex != -1)
+                {
+                    if (_algorithms[AlgBox.SelectedIndex].algName == AlgName.Text)
+                    {
+
+                    }
+                }
+                else if (_algorithms.Any(x => x.algName == AlgName.Text))
                 {
                     MessageBox.Show("Название уровня занято!", "Внимание!");
                     error = true;
@@ -184,10 +242,59 @@ namespace Robot.Form
             if (error == false)
             {
                 _fileWork.WriteAlgorithm(_algorithm);
-                Close();
+                //Close();
             }
             else
                 _algorithm.commands.Clear();
+        }
+
+        private void Del_Click(object sender, RoutedEventArgs e)
+        {
+            if (AlgBox.SelectedIndex != -1)
+            {               
+                _fileWork.DelAlgorithm(_algorithms[AlgBox.SelectedIndex].algName);
+                AlgBox.Items.RemoveAt(AlgBox.SelectedIndex);
+
+                _algorithms = _fileWork.Readalgorithms();
+
+                AlgList.Items.Clear();
+
+                AlgName.Text = "";
+
+                FieldSize.Text = "";
+                RoborColumn.Text = "";
+                RoborRow.Text = "";
+                RoborRotate.Text = "";
+            }
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            if (AlgBox.SelectedIndex != -1)
+            {
+                AlgList.Items.Clear();
+
+                for (int i = 0; i < _algorithms[AlgBox.SelectedIndex].commands.Count; i++)
+                {
+                    AlgList.Items.Add(AddCommand(
+                        _algorithms[AlgBox.SelectedIndex].commands[i].name,
+                        Convert.ToString(_algorithms[AlgBox.SelectedIndex].commands[i].firstArg),
+                        Convert.ToString(_algorithms[AlgBox.SelectedIndex].commands[i].secondArg)
+                        ));
+                }
+
+                AlgName.Text = _algorithms[AlgBox.SelectedIndex].algName;
+
+                FieldSize.Text = Convert.ToString(_algorithms[AlgBox.SelectedIndex].field.countGrid);
+                RoborColumn.Text = Convert.ToString(_algorithms[AlgBox.SelectedIndex].robot.column);
+                RoborRow.Text = Convert.ToString(_algorithms[AlgBox.SelectedIndex].robot.row);
+                RoborRotate.Text = Convert.ToString(_algorithms[AlgBox.SelectedIndex].robot.rotate);
+            }
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

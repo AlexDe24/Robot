@@ -6,9 +6,14 @@ namespace Robot.Logic
 {
     public class FileClass
     {
+        public void DelAlgorithm(string algorithmName)
+        {
+            File.Delete(@"Алгоритмы\" + algorithmName + ".txt");
+        }
+
         public void WriteAlgorithm(AlgorithmSettings algorithm)
         {
-            StreamWriter writer = new StreamWriter(@"Алгоритмы\" + algorithm.algName + ".txt");
+            StreamWriter writer = new StreamWriter(@"Алгоритмы\" + algorithm.algName + ".txt", false, System.Text.Encoding.Default);
 
             writer.WriteLine(algorithm.algName);
 

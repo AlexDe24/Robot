@@ -28,13 +28,13 @@ namespace Robot.Logic
             switch (_commands[step].name)
             {
                 case "Движение":
-                    if (_robot.rotate == 0 && _robot.column < _settings.countGrid)
+                    if (_robot.rotate == 0)
                         _robot.column += _commands[step].firstArg;
-                    else if (_robot.rotate == 90 && _robot.row > 0)
+                    else if (_robot.rotate == 90)
                         _robot.row -= _commands[step].firstArg;
-                    else if (_robot.rotate == 180 && _robot.column > 0)
+                    else if (_robot.rotate == 180)
                         _robot.column -= _commands[step].firstArg;
-                    else if (_robot.rotate == 270 && _robot.row < _settings.countGrid)
+                    else if (_robot.rotate == 270)
                         _robot.row += _commands[step].firstArg;
                     break;
                 case "Поворот":

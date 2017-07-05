@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Поле" Height="400" Width="550" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Симулятор робота" Height="400" Width="550" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        
         <Grid Name="MainGrid"/>
         <Grid Grid.Column="2" Background="DarkGray">
             <StackPanel Margin="25">
@@ -19,11 +20,15 @@
                 <ComboBox Name ="AlgoBox" Height="25"/>
                 <Button Name ="Start"  Content="Запустить" Height="25" Click="Start_Click"/>
 
-                <Label Content="Режим" HorizontalAlignment="Center" Height="25" Margin="0,50,0,0"/>
+                <Label Content="Режим" HorizontalAlignment="Center" Height="25" Margin="0,15,0,0"/>
                 <Button Name ="Mod"  Content="Пошагово Вкл." Height="25" Click="Mod_Click" IsEnabled="False"/>
                 <Button Name ="Step"  Content="Шаг" Height="25" Click="Step_Click" IsEnabled="False"/>
 
-                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Margin="0,75,0,0" Click="AlgoCreate_Click"/>
+                <Label Content="Скорость робота" HorizontalAlignment="Center" Height="25" Margin="0,15,0,0"/>
+                <ScrollBar Name="Speed" Orientation="Horizontal" Scroll="Speed_Scroll"/>
+
+                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Margin="0,25,0,0" Click="AlgoCreate_Click"/>
+                <Button Name ="Exit"  Content="Выход" Height="25" Margin="0,5,0,0" Click="Exit_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

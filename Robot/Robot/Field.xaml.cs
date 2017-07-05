@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading;
 using System.Linq;
+using System;
 using Robot.Logic;
 
 namespace Robot.Form
@@ -21,7 +22,7 @@ namespace Robot.Form
         AlgorithmSettings _algorithmNow;
 
         FileClass _fileWork;
-        Action _action;
+        Logic.Action _action;
         CreateAlg _createAlg;
 
         Color _blackColor;
@@ -33,17 +34,17 @@ namespace Robot.Form
 
         int _step;
 
-        bool isTimer;
+        bool isTimerEnabled;
 
         public Field()
         {
             InitializeComponent();
 
             _timeCB = new TimerCallback(TimerTick); //функция таймера
-            _stepTimer = new Timer(TimerTick, null, 0, 1); //таймер
+            _stepTimer = new Timer(TimerTick, null, 0, 150); //таймер
 
             _fileWork = new FileClass(); //класс работы с файлами
-            _action = new Action(); //класс управления
+            _action = new Logic.Action(); //класс управления
 
             UpdateAlgoBox();
 
@@ -71,7 +72,9 @@ namespace Robot.Form
                 B = 180
             };
 
-            isTimer = false;
+            Speed.Value = 0.5;
+
+            isTimerEnabled = false;
         }
 
         void UpdateAlgoBox()
@@ -89,13 +92,15 @@ namespace Robot.Form
 
         void CreateField()
         {
+            _algorithmNow.field.colorList = new int[_algorithmNow.field.countGrid, _algorithmNow.field.countGrid];
+
             MainGrid.Children.Clear();
             MainGrid.ColumnDefinitions.Clear();
             MainGrid.RowDefinitions.Clear();
 
             _step = 0;
 
-            _colorGrid = new Grid[100, 100];
+            _colorGrid = new Grid[_algorithmNow.field.countGrid, _algorithmNow.field.countGrid];
             _robotGrid = new Grid();
 
             for (int i = 0; i < _algorithmNow.field.countGrid; i++)
@@ -145,7 +150,7 @@ namespace Robot.Form
 
         void TimerTick(object state)
         {
-            if (isTimer == true)
+            if (isTimerEnabled == true)
             {
                 Dispatcher.BeginInvoke(new ThreadStart(delegate
                 {
@@ -161,36 +166,50 @@ namespace Robot.Form
 
         void RobotActive()
         {
-            if (_step >= 0)
+            try
             {
-                Grid.SetRow(_robotGrid, _algorithmNow.robot.row);
-                Grid.SetColumn(_robotGrid, _algorithmNow.robot.column);
-
-                for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+                if (_step >= 0)
                 {
-                    for (int j = 0; j < _algorithmNow.field.countGrid; j++)
+                    for (int i = 0; i < _algorithmNow.field.countGrid; i++)
                     {
-                        if (_algorithmNow.field.colorList[i, j] == 0)
+                        for (int j = 0; j < _algorithmNow.field.countGrid; j++)
                         {
-                            _colorGrid[i, j].Background = new SolidColorBrush(_whiteColor);
+                            if (_algorithmNow.field.colorList[i, j] == 0)
+                            {
+                                _colorGrid[i, j].Background = new SolidColorBrush(_whiteColor);
+                            }
+                            else
+                                _colorGrid[i, j].Background = new SolidColorBrush(_blackColor);
                         }
-                        else
-                            _colorGrid[i, j].Background = new SolidColorBrush(_blackColor);
                     }
-                }
 
-                _step = _action.Move(_step, _algorithmNow);
+                    _step = _action.Move(_step, _algorithmNow);
+
+                    if (_algorithmNow.robot.row >= _algorithmNow.field.countGrid || _algorithmNow.robot.column >= _algorithmNow.field.countGrid)
+                    {
+                        _algorithmNow.robot.row = -1;
+                    }
+                    Grid.SetRow(_robotGrid, _algorithmNow.robot.row);
+                    Grid.SetColumn(_robotGrid, _algorithmNow.robot.column);
+                    
+                }
+                else
+                {
+                    isTimerEnabled = false;
+                    MessageBox.Show("Алгоритм завершён.");
+                }
             }
-            else 
+            catch (Exception)
             {
-                isTimer = false;
-                MessageBox.Show("Алгоритм завершён.");
+                isTimerEnabled = false;
+                MessageBox.Show("Ошибка алгоритма!", "Внимание!");
+                
             }
+            
             
         }
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-
             if (AlgoBox.SelectedIndex != -1)
             {
                 int k = AlgoBox.SelectedIndex;
@@ -203,7 +222,7 @@ namespace Robot.Form
 
                 Mod.IsEnabled = true;
                 Step.IsEnabled = true;
-                isTimer = false;
+                isTimerEnabled = false;
 
                 CreateField();
             }
@@ -212,32 +231,36 @@ namespace Robot.Form
         private void Mod_Click(object sender, RoutedEventArgs e)
         {
             
-            if (isTimer == true)
+            if (isTimerEnabled == true)
             {
-                isTimer = false;
+                isTimerEnabled = false;
                 Mod.Content = "Пошагово Вкл.";
             }
-            else if (isTimer == false)
+            else if (isTimerEnabled == false)
             {
-                isTimer = true;
+                isTimerEnabled = true;
                 Mod.Content = "Пошагово Выкл.";
                 }
         }
 
         private void AlgoCreate_Click(object sender, RoutedEventArgs e)
         {
-            List<string> algNames = new List<string>();
+            UpdateAlgoBox();
 
-            for (int i = 0; i < _algorithms.Count; i++)
-            {
-                algNames.Add(_algorithms[i].algName);
-            }
-                
-            _createAlg = new CreateAlg(_fileWork, algNames);
-
+            _createAlg = new CreateAlg(_fileWork);
             _createAlg.ShowDialog();
 
             UpdateAlgoBox();
+        }
+
+        private void Speed_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            _stepTimer.Change(0, Convert.ToInt32(300 * (1.1 - Speed.Value)));
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

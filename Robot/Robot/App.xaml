@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:Robot"
              StartupUri="Field.xaml">
     <Application.Resources>
+
+        <ControlTemplate x:Key="TextBoxOwal" TargetType="{x:Type TextBox}">
+            <Grid x:Name="controlLayout">
+                <Rectangle  x:Name="TextBoxSurface" RadiusX="5" RadiusY="5" Fill="White" Stroke="Black"/>
+                <TextBox x:Name="TextBoxCaption" VerticalAlignment="Center" Width="145"
+                    HorizontalAlignment="Stretch" BorderThickness="0"></TextBox>
+            </Grid>
+        </ControlTemplate>
         
         <ControlTemplate x:Key="ButtonOwal" TargetType="{x:Type Button}">
             <Grid x:Name="controlLayout">
