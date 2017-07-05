@@ -183,7 +183,7 @@ namespace Robot.Form
                         }
                     }
 
-                    _step = _action.Move(_step, _algorithmNow);
+                    _step = _action.Doing(_step, _algorithmNow);
 
                     if (_algorithmNow.robot.row >= _algorithmNow.field.countGrid || _algorithmNow.robot.column >= _algorithmNow.field.countGrid)
                     {

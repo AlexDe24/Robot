@@ -4,6 +4,9 @@ using System.IO;
 
 namespace Robot.Logic
 {
+    /// <summary>
+    /// Класс работы с файлами
+    /// </summary>
     public class FileClass
     {
         public void DelAlgorithm(string algorithmName)
@@ -11,6 +14,10 @@ namespace Robot.Logic
             File.Delete(@"Алгоритмы\" + algorithmName + ".txt");
         }
 
+        /// <summary>
+        /// Функция записи алгоритма в файл
+        /// </summary>
+        /// <param name="algorithm">алгоритм</param>
         public void WriteAlgorithm(AlgorithmSettings algorithm)
         {
             StreamWriter writer = new StreamWriter(@"Алгоритмы\" + algorithm.algName + ".txt", false, System.Text.Encoding.Default);
@@ -33,6 +40,10 @@ namespace Robot.Logic
             writer.Close();
         }
 
+        /// <summary>
+        /// Функция чтение алгоритма из файла
+        /// </summary>
+        /// <returns>алгоритм</returns>
         public List<AlgorithmSettings> Readalgorithms()
         {
             List<AlgorithmSettings> algorithms = new List<AlgorithmSettings>();

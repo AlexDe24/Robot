@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Robot.Logic
 {
+    /// <summary>
+    /// Класс параметров робота
+    /// </summary>
     public class RobotSettings
     {
         public int row { get; set; } //строка

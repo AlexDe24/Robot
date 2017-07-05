@@ -29,11 +29,11 @@ namespace Robot.Form
         {
             InitializeComponent();
 
-            _fileWork = fileWork;
+            _fileWork = fileWork;//класс работы с файлами
 
-            _algorithms = _fileWork.Readalgorithms();
+            _algorithms = _fileWork.Readalgorithms();//все алгоритмы
 
-            _algorithm = new AlgorithmSettings();
+            _algorithm = new AlgorithmSettings();//работающий в данный момент алгоритм
 
             RoborRotate.Items.Add("0");
             RoborRotate.Items.Add("90");

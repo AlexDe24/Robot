@@ -13,13 +13,12 @@ namespace Robot.Logic
         RobotSettings _robot;
 
         /// <summary>
-        /// Функция для передвижения робота
+        /// Выполнение команд
         /// </summary>
-        /// <param name="rowColumn">номер строки/столбца</param>
-        /// <param name="countGrid">количество строк</param>
-        /// <param name="commands">комманды</param>
+        /// <param name="step">шаг</param>
+        /// <param name="algorithm">класс агоритма</param>
         /// <returns></returns>
-        public int Move(int step, AlgorithmSettings algorithm)
+        public int Doing(int step, AlgorithmSettings algorithm)
         {
             _settings = algorithm.field;
             _commands = algorithm.commands;

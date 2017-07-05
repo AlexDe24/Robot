@@ -6,13 +6,13 @@
     <Application.Resources>
 
         <ControlTemplate x:Key="TextBoxOwal" TargetType="{x:Type TextBox}">
-            <Grid x:Name="controlLayout">
-                <Rectangle  x:Name="TextBoxSurface" RadiusX="5" RadiusY="5" Fill="White" Stroke="Black"/>
-                <TextBox x:Name="TextBoxCaption" VerticalAlignment="Center" Width="145"
-                    HorizontalAlignment="Stretch" BorderThickness="0"></TextBox>
-            </Grid>
+            <Border CornerRadius="5" BorderBrush="Black" BorderThickness="1"
+        VerticalAlignment="Center" UseLayoutRounding="True" Height="20">
+                <TextBox BorderThickness="0" Background="Transparent"/>
+            </Border>
+
         </ControlTemplate>
-        
+
         <ControlTemplate x:Key="ButtonOwal" TargetType="{x:Type Button}">
             <Grid x:Name="controlLayout">
                 <Rectangle  x:Name="buttonSurface" RadiusX="5" RadiusY="5" Fill="White" Stroke="Black"/>

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Robot.Logic
 {
+    /// <summary>
+    /// Класс команд
+    /// </summary>
     public class Commands
     {
         public int nom { get; set; } //номер команды
