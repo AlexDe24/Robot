@@ -63,7 +63,7 @@ namespace Robot.Logic
                 algorithm.field.countGrid = Convert.ToInt32(sp[0]);
                 algorithm.robot.row = Convert.ToInt32(sp[1]);
                 algorithm.robot.column = Convert.ToInt32(sp[2]);
-                algorithm.robot.rotate = Convert.ToInt32(sp[3]);
+                algorithm.robot.rotate = sp[3];
 
                 while (!read.EndOfStream)
                 {
@@ -73,8 +73,8 @@ namespace Robot.Logic
                     {
                         nom = Convert.ToInt32(spli[0]),
                         name = spli[1],
-                        firstArg = Convert.ToInt32(spli[2]),
-                        secondArg = Convert.ToInt32(spli[3])
+                        firstArg = spli[2],
+                        secondArg = spli[3]
                     });
                 }
                 algorithms.Add(algorithm);

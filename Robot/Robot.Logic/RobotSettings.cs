@@ -14,6 +14,6 @@ namespace Robot.Logic
         public int row { get; set; } //строка
         public int column { get; set; } //столбец
 
-        public int rotate { get; set; } //поворот робота
+        public string rotate { get; set; } //поворот робота
     }
 }

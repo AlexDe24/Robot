@@ -13,7 +13,7 @@ namespace Robot.Logic
     {
         public int nom { get; set; } //номер команды
         public string name { get; set; } //название команды 
-        public int firstArg { get; set; } //первый аргумент
-        public int secondArg { get; set; } //второй аргумент
+        public string firstArg { get; set; } //первый аргумент
+        public string secondArg { get; set; } //второй аргумент
     }
 }

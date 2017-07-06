@@ -27,51 +27,51 @@ namespace Robot.Logic
             switch (_commands[step].name)
             {
                 case "Движение":
-                    if (_robot.rotate == 0)
-                        _robot.column += _commands[step].firstArg;
-                    else if (_robot.rotate == 90)
-                        _robot.row -= _commands[step].firstArg;
-                    else if (_robot.rotate == 180)
-                        _robot.column -= _commands[step].firstArg;
-                    else if (_robot.rotate == 270)
-                        _robot.row += _commands[step].firstArg;
+                    if (_robot.rotate == "Направо")
+                        _robot.column += Convert.ToInt32(_commands[step].firstArg);
+                    else if (_robot.rotate == "Вверх")
+                        _robot.row -= Convert.ToInt32(_commands[step].firstArg);
+                    else if (_robot.rotate == "Налево")
+                        _robot.column -= Convert.ToInt32(_commands[step].firstArg);
+                    else if (_robot.rotate == "Вниз")
+                        _robot.row += Convert.ToInt32(_commands[step].firstArg);
                     break;
                 case "Поворот":
-                    if (_commands[step].firstArg == 1)
+                    if (_commands[step].firstArg == "Налево")
                     {
-                        if (_robot.rotate == 0)
-                            _robot.rotate = 90;
-                        else if (_robot.rotate == 90)
-                            _robot.rotate = 180;
-                        else if (_robot.rotate == 180)
-                            _robot.rotate = 270;
-                        else if (_robot.rotate == 270)
-                            _robot.rotate = 0;
+                        if (_robot.rotate == "Направо")
+                            _robot.rotate = "Вверх";
+                        else if (_robot.rotate == "Вверх")
+                            _robot.rotate = "Налево";
+                        else if (_robot.rotate == "Налево")
+                            _robot.rotate = "Вниз";
+                        else if (_robot.rotate == "Вниз")
+                            _robot.rotate = "Направо";
                     }
-                    else if (_commands[step].firstArg == 0)
+                    else if (_commands[step].firstArg == "Направо")
                     {
-                        if (_robot.rotate == 90)
-                            _robot.rotate = 0;
-                        else if (_robot.rotate == 180)
-                            _robot.rotate = 90;
-                        else if (_robot.rotate == 270)
-                            _robot.rotate = 180;
-                        else if (_robot.rotate == 0)
-                            _robot.rotate = 270;
+                        if (_robot.rotate == "Вверх")
+                            _robot.rotate = "Вниз";
+                        else if (_robot.rotate == "Налево")
+                            _robot.rotate = "Вверх";
+                        else if (_robot.rotate == "Вниз")
+                            _robot.rotate = "Налево";
+                        else if (_robot.rotate == "Направо")
+                            _robot.rotate = "Вниз";
                     }
                     break;
                 case "Заливка":
-                    _settings.colorList[_robot.row, _robot.column] = _commands[step].firstArg;
+                    _settings.colorList[_robot.row, _robot.column] = Convert.ToInt32(_commands[step].firstArg);
                     break;
                 case "Изучение":
                     if (_settings.colorList[_robot.row, _robot.column] == 0)
-                        return _commands[step].firstArg;
+                        return Convert.ToInt32(_commands[step].firstArg);
                     else
-                        return _commands[step].secondArg;
+                        return Convert.ToInt32(_commands[step].secondArg);
                 default:
                     break;
             }
-            return _commands[step].secondArg;
+            return Convert.ToInt32(_commands[step].secondArg);
         }
     }
 }

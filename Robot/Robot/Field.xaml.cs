@@ -247,7 +247,7 @@ namespace Robot.Form
         {
             UpdateAlgoBox();
 
-            _createAlg = new CreateAlg(_fileWork);
+            _createAlg = new CreateAlg(_fileWork, null);
             _createAlg.ShowDialog();
 
             UpdateAlgoBox();
@@ -261,6 +261,16 @@ namespace Robot.Form
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void AlgoRedact_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateAlgoBox();
+
+            _createAlg = new CreateAlg(_fileWork, (AlgoBox.SelectedItem as AlgorithmSettings));
+            _createAlg.ShowDialog();
+
+            UpdateAlgoBox();
         }
     }
 }

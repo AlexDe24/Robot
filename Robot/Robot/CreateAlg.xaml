@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Создание алгоритма" Height="420" Width="680" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
+        Title="Создание алгоритма" Height="420" Width="750" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*"/>
-            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -18,35 +18,31 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.RowSpan="2" Grid.Column="2" Margin="15" VerticalAlignment="Center">
+        <StackPanel Grid.RowSpan="3" Grid.Column="2" Margin="10" VerticalAlignment="Center">
 
             <Button Template="{DynamicResource ButtonOwal}" Name="AddCom" Height="25" VerticalAlignment="Top" Content="Добавить команду" Width="120" Click="AddCom_Click"/>
+            <Button Template="{DynamicResource ButtonOwal}" Name="Save"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Сохранить алгоритм" Width="120" Click="Save_Click"/>
             <Button Template="{DynamicResource ButtonOwal}" Name="DelCom"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Удалить команду" Width="120" Click="DelCom_Click"/>
 
-            <StackPanel Width="150">
+            <StackPanel >
                 <Label Content="Название алгоритма" HorizontalContentAlignment="Center"/>
-                <TextBox Template="{DynamicResource TextBoxOwal}" Height="20"  Name="AlgName"/>
+                <TextBox Height="20"  Name="AlgName" Width="150"/>
 
                 <Label Content="Размер поля" HorizontalContentAlignment="Center"/>
-                <TextBox Template="{DynamicResource TextBoxOwal}" Height="20" Name="FieldSize"/>
+                <TextBox  Height="20" Name="FieldSize" Width="150"/>
 
-                <Label Content="Положение робота по Y" HorizontalContentAlignment="Center"/>
-                <TextBox Template="{DynamicResource TextBoxOwal}" Height="20" Name="RoborRow"/>
+                <Label Content="Начальное положение робота по X" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="RoborColumn" Width="150"/>
 
-                <Label Content="Положение робота по X" HorizontalContentAlignment="Center"/>
-                <TextBox Template="{DynamicResource TextBoxOwal}" Height="20" Name="RoborColumn"/>
-
-                <Label Content="Поворот робота" HorizontalContentAlignment="Center"/>
-                <ComboBox Height="20" Name="RoborRotate">
-                    <ComboBox.Background>
-                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                            <GradientStop Color="#FFE5E5E5" Offset="1"/>
-                        </LinearGradientBrush>
-                    </ComboBox.Background>
-
+                <Label Content="Начальное положение робота по Y" HorizontalContentAlignment="Center"/>
+                <TextBox Height="20" Name="RoborRow" Width="150"/>
+                
+                <Label Content="Начальный поворот робота" HorizontalContentAlignment="Center"/>
+                <ComboBox Height="20" Name="RoborRotate" Width="150">
                 </ComboBox>
             </StackPanel>
+            
+            <Button Template="{DynamicResource ButtonOwal}" Name="Exit"  Height="25" VerticalAlignment="Top" Margin="0,15,0,0" Content="Выход" Width="120" Click="Exit_Click"/>
 
         </StackPanel>
 
@@ -57,17 +53,8 @@
             <Label Content="Второй аргумент" Width="110"/>
         </StackPanel>
 
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+        <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" Margin="0,0,0,25">
             <ListBox Name="AlgList"/>
         </Border>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <ComboBox Name="AlgBox"  Height="25" VerticalAlignment="Top"  Width="100"/>
-            <Button Template="{DynamicResource ButtonOwal}" Name="Save"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Сохранить алгоритм" Width="120" Click="Save_Click"/>
-            <Button Template="{DynamicResource ButtonOwal}" Name="Load"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Загрузить алгоритм" Width="120" Click="Load_Click"/>
-            <Button Template="{DynamicResource ButtonOwal}" Name="Del"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Удалить алгоритм" Width="120" Click="Del_Click"/>
-            <Button Template="{DynamicResource ButtonOwal}" Name="Exit"  Height="25" VerticalAlignment="Top" Margin="10,0,0,0" Content="Выход" Width="120" Click="Exit_Click"/>
-        </StackPanel>
-
     </Grid>
 </Window>
