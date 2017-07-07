@@ -1,0 +1,24 @@
+﻿<Window x:Class="Robot.Form.PermissionDel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Robot.Form"
+        mc:Ignorable="d"
+        Title="Удаление" Height="130" Width="220" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Center">Удалить алгоритм?</TextBlock>
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Center">
+            <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">Да</Button>
+            <Button IsCancel="True" MinWidth="60" Click="Button_Click">Нет</Button>
+        </WrapPanel>
+
+    </Grid>
+</Window>

@@ -11,7 +11,8 @@ namespace Robot.Logic
     /// </summary>
     public class FieldSettings
     {
-        public int countGrid { get; set; } //размер поля
+        public int countGridX { get; set; } //размер поля по X
+        public int countGridY { get; set; } //размер поля по Y
 
         public int[,] colorList = new int[100, 100]; //закрашенность поля
     }

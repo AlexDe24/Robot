@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Robot.Form"
         mc:Ignorable="d"
-        Title="Создание алгоритма" Height="420" Width="750" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
+        Title="Создание алгоритма" Height="500" Width="750" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*"/>
@@ -28,9 +28,12 @@
                 <Label Content="Название алгоритма" HorizontalContentAlignment="Center"/>
                 <TextBox Height="20"  Name="AlgName" Width="150"/>
 
-                <Label Content="Размер поля" HorizontalContentAlignment="Center"/>
-                <TextBox  Height="20" Name="FieldSize" Width="150"/>
+                <Label Content="Размер поля по X" HorizontalContentAlignment="Center"/>
+                <TextBox  Height="20" Name="FieldSizeX" Width="150"/>
 
+                <Label Content="Размер поля по Y" HorizontalContentAlignment="Center"/>
+                <TextBox  Height="20" Name="FieldSizeY" Width="150"/>
+                
                 <Label Content="Начальное положение робота по X" HorizontalContentAlignment="Center"/>
                 <TextBox Height="20" Name="RoborColumn" Width="150"/>
 

@@ -51,17 +51,20 @@ namespace Robot.Logic
                     else if (_commands[step].firstArg == "Направо")
                     {
                         if (_robot.rotate == "Вверх")
-                            _robot.rotate = "Вниз";
-                        else if (_robot.rotate == "Налево")
-                            _robot.rotate = "Вверх";
-                        else if (_robot.rotate == "Вниз")
-                            _robot.rotate = "Налево";
+                            _robot.rotate = "Направо";
                         else if (_robot.rotate == "Направо")
                             _robot.rotate = "Вниз";
+                        else if (_robot.rotate == "Вниз")
+                            _robot.rotate = "Налево";
+                        else if (_robot.rotate == "Налево")
+                            _robot.rotate = "Вверх";
                     }
                     break;
                 case "Заливка":
-                    _settings.colorList[_robot.row, _robot.column] = Convert.ToInt32(_commands[step].firstArg);
+                    if (_commands[step].firstArg == "Белый")
+                        _settings.colorList[_robot.row, _robot.column] = 0;
+                    else
+                        _settings.colorList[_robot.row, _robot.column] = 1;
                     break;
                 case "Изучение":
                     if (_settings.colorList[_robot.row, _robot.column] == 0)

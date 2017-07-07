@@ -24,7 +24,8 @@ namespace Robot.Logic
 
             writer.WriteLine(algorithm.algName);
 
-            writer.Write(algorithm.field.countGrid + "|");
+            writer.Write(algorithm.field.countGridX + "|");
+            writer.Write(algorithm.field.countGridY + "|");
             writer.Write(algorithm.robot.row + "|");
             writer.Write(algorithm.robot.column + "|");
             writer.WriteLine(algorithm.robot.rotate);
@@ -60,10 +61,11 @@ namespace Robot.Logic
 
                 string[] sp = read.ReadLine().Split('|'); 
 
-                algorithm.field.countGrid = Convert.ToInt32(sp[0]);
-                algorithm.robot.row = Convert.ToInt32(sp[1]);
-                algorithm.robot.column = Convert.ToInt32(sp[2]);
-                algorithm.robot.rotate = sp[3];
+                algorithm.field.countGridX = Convert.ToInt32(sp[0]);
+                algorithm.field.countGridY = Convert.ToInt32(sp[1]);
+                algorithm.robot.row = Convert.ToInt32(sp[2]);
+                algorithm.robot.column = Convert.ToInt32(sp[3]);
+                algorithm.robot.rotate = sp[4];
 
                 while (!read.EndOfStream)
                 {

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Linq;
 using System;
 using Robot.Logic;
+using AvalonDock;
 
 namespace Robot.Form
 {
@@ -15,6 +16,8 @@ namespace Robot.Form
     /// </summary>
     public partial class Field : Window
     {
+        PermissionDel permission;
+
         TimerCallback _timeCB;
         Timer _stepTimer;
 
@@ -92,7 +95,7 @@ namespace Robot.Form
 
         void CreateField()
         {
-            _algorithmNow.field.colorList = new int[_algorithmNow.field.countGrid, _algorithmNow.field.countGrid];
+            _algorithmNow.field.colorList = new int[_algorithmNow.field.countGridX, _algorithmNow.field.countGridY];
 
             MainGrid.Children.Clear();
             MainGrid.ColumnDefinitions.Clear();
@@ -100,21 +103,26 @@ namespace Robot.Form
 
             _step = 0;
 
-            _colorGrid = new Grid[_algorithmNow.field.countGrid, _algorithmNow.field.countGrid];
+            _colorGrid = new Grid[_algorithmNow.field.countGridX, _algorithmNow.field.countGridY];
             _robotGrid = new Grid();
 
-            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGridX; i++)
             {
                 RowDefinition rd = new RowDefinition();
-                ColumnDefinition cd = new ColumnDefinition();
 
                 MainGrid.RowDefinitions.Add(rd);
+            }
+
+            for (int i = 0; i < _algorithmNow.field.countGridY; i++)
+            {
+                ColumnDefinition cd = new ColumnDefinition();
+
                 MainGrid.ColumnDefinitions.Add(cd);
             }
 
-            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGridX; i++)
             {
-                for (int j = 0; j < _algorithmNow.field.countGrid; j++)
+                for (int j = 0; j < _algorithmNow.field.countGridY; j++)
                 {
                     Grid bton = new Grid();
 
@@ -130,17 +138,22 @@ namespace Robot.Form
                 }
             }
 
-            for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+            for (int i = 0; i < _algorithmNow.field.countGridY; i++)
             {
                 _algorithmNow.field.colorList[0, i] = 1;
-                _algorithmNow.field.colorList[_algorithmNow.field.countGrid - 1, i] = 1;
-                _colorGrid[0, i].Background = new SolidColorBrush(_blackColor);
-                _colorGrid[_algorithmNow.field.countGrid - 1, i].Background = new SolidColorBrush(_blackColor);
+                _algorithmNow.field.colorList[_algorithmNow.field.countGridX - 1, i] = 1;
 
+                _colorGrid[0, i].Background = new SolidColorBrush(_blackColor);
+                _colorGrid[_algorithmNow.field.countGridX - 1, i].Background = new SolidColorBrush(_blackColor);
+            }
+
+            for (int i = 0; i < _algorithmNow.field.countGridX; i++)
+            {
                 _algorithmNow.field.colorList[i, 0] = 1;
-                _algorithmNow.field.colorList[i, _algorithmNow.field.countGrid - 1] = 1;
+                _algorithmNow.field.colorList[i, _algorithmNow.field.countGridY - 1] = 1;
+
                 _colorGrid[i, 0].Background = new SolidColorBrush(_blackColor);
-                _colorGrid[i, _algorithmNow.field.countGrid - 1].Background = new SolidColorBrush(_blackColor);
+                _colorGrid[i, _algorithmNow.field.countGridY - 1].Background = new SolidColorBrush(_blackColor);
             }
 
             _robotGrid.Background = new SolidColorBrush(_robotColor);
@@ -170,9 +183,9 @@ namespace Robot.Form
             {
                 if (_step >= 0)
                 {
-                    for (int i = 0; i < _algorithmNow.field.countGrid; i++)
+                    for (int i = 0; i < _algorithmNow.field.countGridX; i++)
                     {
-                        for (int j = 0; j < _algorithmNow.field.countGrid; j++)
+                        for (int j = 0; j < _algorithmNow.field.countGridY; j++)
                         {
                             if (_algorithmNow.field.colorList[i, j] == 0)
                             {
@@ -185,10 +198,11 @@ namespace Robot.Form
 
                     _step = _action.Doing(_step, _algorithmNow);
 
-                    if (_algorithmNow.robot.row >= _algorithmNow.field.countGrid || _algorithmNow.robot.column >= _algorithmNow.field.countGrid)
+                    if (_algorithmNow.robot.row >= _algorithmNow.field.countGridX || _algorithmNow.robot.column >= _algorithmNow.field.countGridY)
                     {
                         _algorithmNow.robot.row = -1;
                     }
+
                     Grid.SetRow(_robotGrid, _algorithmNow.robot.row);
                     Grid.SetColumn(_robotGrid, _algorithmNow.robot.column);
                     
@@ -265,12 +279,26 @@ namespace Robot.Form
 
         private void AlgoRedact_Click(object sender, RoutedEventArgs e)
         {
-            UpdateAlgoBox();
+            if (AlgoBox.SelectedIndex != -1)
+            {
+                _createAlg = new CreateAlg(_fileWork, _algorithms.Where(x => x.algName == AlgoBox.Items[AlgoBox.SelectedIndex]).First());
+                _createAlg.ShowDialog();
 
-            _createAlg = new CreateAlg(_fileWork, (AlgoBox.SelectedItem as AlgorithmSettings));
-            _createAlg.ShowDialog();
+                UpdateAlgoBox();
+            }
+        }
 
-            UpdateAlgoBox();
+        private void Del_Click(object sender, RoutedEventArgs e)
+        {
+            if (AlgoBox.SelectedIndex != -1)
+            {
+                permission = new PermissionDel();
+                if (permission.ShowDialog() == true)
+                {
+                    _fileWork.DelAlgorithm(AlgoBox.Items[AlgoBox.SelectedIndex] as string);
+                    UpdateAlgoBox();
+                }
+            }
         }
     }
 }
