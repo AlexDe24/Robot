@@ -35,7 +35,7 @@ namespace Robot.Form
 
             if (algorithm != null)
             {
-                _algorithm = algorithm;//работающий в данный момент алгоритм
+                _algorithm = _fileWork.Readalgorithms().Where(x => x.algName == algorithm.algName).First();
                 Load();
             }
             else
