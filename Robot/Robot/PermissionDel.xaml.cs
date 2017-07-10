@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace Robot.Form
 {
     /// <summary>
-    /// Логика взаимодействия для PermissionDel.xaml
+    /// Форма запрома на удаление
     /// </summary>
     public partial class PermissionDel : Window
     {

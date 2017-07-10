@@ -20,6 +20,7 @@ namespace Robot.Logic
         /// <returns></returns>
         public int Doing(int step, AlgorithmSettings algorithm)
         {
+            step--;
             _settings = algorithm.field;
             _commands = algorithm.commands;
             _robot = algorithm.robot;
@@ -61,6 +62,10 @@ namespace Robot.Logic
                     }
                     break;
                 case "Заливка":
+                    /*if (step == -1)
+                    {
+                        step++;
+                    }*/
                     if (_commands[step].firstArg == "Белый")
                         _settings.colorList[_robot.row, _robot.column] = 0;
                     else

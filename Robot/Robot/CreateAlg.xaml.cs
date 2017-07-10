@@ -16,22 +16,22 @@ using Robot.Logic;
 namespace Robot.Form
 {
     /// <summary>
-    /// Логика взаимодействия для CreateAlg.xaml
+    /// Форма создания алгоритмов
     /// </summary>
     public partial class CreateAlg : Window
     {
-        FileClass _fileWork;
-        AlgorithmSettings _algorithm;
+        FileClass _fileWork;//класс работы с файлами
+        AlgorithmSettings _algorithm;//алгоритм, с которым рабтаю сейчас
 
-        List<AlgorithmSettings> _algorithms;
+        List<AlgorithmSettings> _algorithms;//все алгоритмы
 
         public CreateAlg(FileClass fileWork, AlgorithmSettings algorithm)
         {
             InitializeComponent();
 
-            _fileWork = fileWork;//класс работы с файлами
+            _fileWork = fileWork;
 
-            _algorithms = _fileWork.Readalgorithms();//все алгоритмы
+            _algorithms = _fileWork.Readalgorithms();
 
             if (algorithm != null)
             {
@@ -75,6 +75,13 @@ namespace Robot.Form
                 RoborRotate.SelectedIndex = 3;
         }
 
+        /// <summary>
+        /// Функция добавления команды
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="firstArg"></param>
+        /// <param name="secondArg"></param>
+        /// <returns></returns>
         StackPanel AddCommand(string name, string firstArg, string secondArg)
         {
             ComboBox CommandName = new ComboBox()
@@ -89,11 +96,10 @@ namespace Robot.Form
             CommandName.Items.Add("Поворот");
             CommandName.Items.Add("Заливка");
             CommandName.Items.Add("Изучение");
-
-            
+                        
             TextBox CommandNom = new TextBox()
             {
-                Text = Convert.ToString(AlgList.Items.Count),
+                Text = Convert.ToString(AlgList.Items.Count + 1),
                 IsEnabled = false,
                 Height = 25,
                 Width = 105,
@@ -124,7 +130,7 @@ namespace Robot.Form
                         CommandFirstArg.Items.Add(j);
                     }
 
-                    CommandFirstArg.SelectedIndex = Convert.ToInt32(firstArg);
+                    CommandFirstArg.SelectedIndex = Convert.ToInt32(firstArg) - 1;
 
                     CommandSecondArg.ToolTip = "Номер следующей команды";
                     break;
@@ -139,9 +145,9 @@ namespace Robot.Form
                     CommandFirstArg.Items.Add("Налево");
 
                     if (firstArg == "Налево")
-                        CommandFirstArg.SelectedIndex = 0;
-                    else
                         CommandFirstArg.SelectedIndex = 1;
+                    else
+                        CommandFirstArg.SelectedIndex = 0;
 
                     CommandSecondArg.ToolTip = "Номер следующей команды";
                     break;
@@ -167,12 +173,12 @@ namespace Robot.Form
                     CommandFirstArg.ToolTip = "Номер команды, если текущая ячейка белая";
 
                     CommandFirstArg.Items.Clear();
-                    for (int j = -1; j <= AlgList.Items.Count; j++)
+                    for (int j = 0; j <= AlgList.Items.Count + 1; j++)
                     {
                         CommandFirstArg.Items.Add(j);
                     }
 
-                    CommandFirstArg.SelectedIndex = Convert.ToInt32(firstArg) + 1;
+                    CommandFirstArg.SelectedIndex = Convert.ToInt32(firstArg);
 
                     CommandSecondArg.ToolTip = "Номер команды, если текущая ячейка чёрная";
                     break;
@@ -181,12 +187,12 @@ namespace Robot.Form
             }
 
             CommandSecondArg.Items.Clear();
-            for (int j = -1; j <= _algorithm.commands.Count; j++)
+            for (int j = 0; j <= _algorithm.commands.Count + 1; j++)
             {
                 CommandSecondArg.Items.Add(j);
             }
 
-            CommandSecondArg.SelectedIndex = Convert.ToInt32(secondArg) + 1;
+            CommandSecondArg.SelectedIndex = Convert.ToInt32(secondArg);
 
             StackPanel Command = new StackPanel()
             {
@@ -202,11 +208,21 @@ namespace Robot.Form
             return Command;
         }
 
+        /// <summary>
+        /// Добавление команды по клику
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddCom_Click(object sender, RoutedEventArgs e)
         {
             AlgList.Items.Add(AddCommand("Движение", null,null));
         }
 
+        /// <summary>
+        /// Удаление команды по клику
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DelCom_Click(object sender, RoutedEventArgs e)
         {
             if (AlgList.SelectedIndex != -1)
@@ -217,7 +233,7 @@ namespace Robot.Form
                 {
                     TextBox CommandNom = ((AlgList.Items[i] as StackPanel).Children[0] as TextBox);
 
-                    CommandNom.Text = Convert.ToString(i);
+                    CommandNom.Text = Convert.ToString(i + 1);
                 }
             }
         }
@@ -240,7 +256,7 @@ namespace Robot.Form
                             CommandFirstArg.ToolTip = "Количество клеток";
 
                             CommandFirstArg.Items.Clear();
-                            for (int j = 0; j < 15; j++)
+                            for (int j = 1; j <= 15; j++)
                             {
                                 CommandFirstArg.Items.Add(j);
                             }
@@ -253,8 +269,8 @@ namespace Robot.Form
                             CommandFirstArg.ToolTip = "Направление поворота";
 
                             CommandFirstArg.Items.Clear();
-                            CommandFirstArg.Items.Add("Налево");
                             CommandFirstArg.Items.Add("Направо");
+                            CommandFirstArg.Items.Add("Налево");
                             CommandFirstArg.SelectedIndex = c;
 
                             CommandSecondArg.ToolTip = "Номер следующей команды";
@@ -275,7 +291,7 @@ namespace Robot.Form
                             CommandFirstArg.ToolTip = "Номер команды, если текущая ячейка белая";
 
                             CommandFirstArg.Items.Clear();
-                            for (int j = -1; j <= AlgList.Items.Count; j++)
+                            for (int j = 0; j <= AlgList.Items.Count + 1; j++)
                             {
                                 CommandFirstArg.Items.Add(j);
                             }
@@ -290,7 +306,7 @@ namespace Robot.Form
                     int k = CommandSecondArg.SelectedIndex;
 
                     CommandSecondArg.Items.Clear();
-                    for (int j = -1; j <= AlgList.Items.Count; j++)
+                    for (int j = 0; j <= AlgList.Items.Count + 1; j++)
                     {
                         CommandSecondArg.Items.Add(j);
                     }
@@ -350,6 +366,7 @@ namespace Robot.Form
             if (error == false)
             {
                 _fileWork.WriteAlgorithm(_algorithm);
+                MessageBox.Show("Алгоритм сохранён!", "Внимание!");
             }
             else
                 _algorithm.commands.Clear();

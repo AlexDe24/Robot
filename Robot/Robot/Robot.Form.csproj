@@ -63,6 +63,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AlgorinthmsControl.xaml.cs">
+      <DependentUpon>AlgorinthmsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -75,11 +78,11 @@
     <Compile Include="CreateAlg.xaml.cs">
       <DependentUpon>CreateAlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Field.xaml.cs">
+      <DependentUpon>Field.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FieldControl.xaml.cs">
       <DependentUpon>FieldControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FieldSet.xaml.cs">
-      <DependentUpon>FieldSet.xaml</DependentUpon>
     </Compile>
     <Compile Include="PermissionDel.xaml.cs">
       <DependentUpon>PermissionDel.xaml</DependentUpon>
@@ -113,6 +116,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AlgorinthmsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ControlWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,11 +128,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FieldControl.xaml">
+    <Page Include="Field.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FieldSet.xaml">
+    <Page Include="FieldControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

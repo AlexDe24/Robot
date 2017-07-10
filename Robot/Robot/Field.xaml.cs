@@ -16,21 +16,19 @@ using Robot.Logic;
 namespace Robot.Form
 {
     /// <summary>
-    /// Логика взаимодействия для FieldSet.xaml
+    /// Поле для работа
     /// </summary>
-    public partial class FieldSet
+    public partial class Field
     {
-
-        Color _blackColor;
+        Color _blackColor; //цвета на поле
         Color _whiteColor;
-        Color _robotColor;
 
-        Grid[,] _colorGrid;
-        Grid _robotGrid;
+        Grid[,] _colorGrid; //список ячеек
+        Image _robot; //ячейка робота
 
         AlgorithmSettings _algorithmNow;
 
-        public FieldSet(AlgorithmSettings algorithmNow)
+        public Field(AlgorithmSettings algorithmNow, int colv)
         {
             InitializeComponent();
 
@@ -52,23 +50,13 @@ namespace Robot.Form
                 B = 100
             };
 
-            _robotColor = new Color()
-            {
-                A = 200,
-                R = 130,
-                G = 130,
-                B = 180
-            };
+            CreateField();
 
-            Title = algorithmNow.algName;
+            Title = "Алгоритм: " + algorithmNow.algName + "(" + colv + ")";
 
-            Init();
-        }
-
-        void Init()
-        {
             DataContext = this;
         }
+
 
         public void FieldUpdate()
         {
@@ -85,8 +73,26 @@ namespace Robot.Form
                 }
             }
 
-            Grid.SetRow(_robotGrid, _algorithmNow.robot.row);
-            Grid.SetColumn(_robotGrid, _algorithmNow.robot.column);
+            switch (_algorithmNow.robot.rotate)
+            {
+                case "Направо":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotRight.PNG"));
+                    break;
+                case "Вверх":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotTop.PNG"));
+                    break;
+                case "Налево":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotLeft.PNG"));
+                    break;
+                case "Вниз":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotBot.PNG"));
+                    break;
+                default:
+                    break;
+            }
+
+            Grid.SetRow(_robot, _algorithmNow.robot.row);
+            Grid.SetColumn(_robot, _algorithmNow.robot.column);
         }
 
         public void CreateField()
@@ -98,7 +104,27 @@ namespace Robot.Form
             MainGrid.RowDefinitions.Clear();
 
             _colorGrid = new Grid[_algorithmNow.field.countGridX, _algorithmNow.field.countGridY];
-            _robotGrid = new Grid();
+
+            _robot = new Image();
+
+            switch (_algorithmNow.robot.rotate)
+            {
+                case "Направо":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotRight.PNG"));
+                    break;
+                case "Вверх":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotTop.PNG"));
+                    break;
+                case "Налево":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotLeft.PNG"));
+                    break;
+                case "Вниз":
+                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotBot.PNG"));
+                    break;
+                default:
+                    break;
+            }
+            
 
             for (int i = 0; i < _algorithmNow.field.countGridX; i++)
             {
@@ -121,7 +147,7 @@ namespace Robot.Form
                     Grid bton = new Grid();
 
                     bton.Background = new SolidColorBrush(_whiteColor);
-
+                    
                     MainGrid.Children.Add(bton);
 
                     Grid.SetRow(bton, i);
@@ -150,9 +176,10 @@ namespace Robot.Form
                 _colorGrid[i, _algorithmNow.field.countGridY - 1].Background = new SolidColorBrush(_blackColor);
             }
 
-            _robotGrid.Background = new SolidColorBrush(_robotColor);
+            MainGrid.Children.Add(_robot);
 
-            MainGrid.Children.Add(_robotGrid);
+            Grid.SetRow(_robot, _algorithmNow.robot.row);
+            Grid.SetColumn(_robot, _algorithmNow.robot.column);
         }
     }
 }

@@ -21,8 +21,8 @@
         <StackPanel Grid.RowSpan="3" Grid.Column="2" Margin="10" VerticalAlignment="Center">
 
             <Button Template="{DynamicResource ButtonOwal}" Name="AddCom" Height="25" VerticalAlignment="Top" Content="Добавить команду" Width="120" Click="AddCom_Click"/>
-            <Button Template="{DynamicResource ButtonOwal}" Name="Save"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Сохранить алгоритм" Width="120" Click="Save_Click"/>
             <Button Template="{DynamicResource ButtonOwal}" Name="DelCom"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Удалить команду" Width="120" Click="DelCom_Click"/>
+            <Button Template="{DynamicResource ButtonOwal}" Name="Save"  Height="25" VerticalAlignment="Top" Margin="0,5,0,0" Content="Сохранить алгоритм" Width="120" Click="Save_Click"/>
 
             <StackPanel >
                 <Label Content="Название алгоритма" HorizontalContentAlignment="Center"/>

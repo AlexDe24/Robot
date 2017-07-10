@@ -1,81 +1,64 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Threading;
-using System.Linq;
+﻿using Robot.Logic;
 using System;
-using Robot.Logic;
-using AvalonDock;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Robot.Form
 {
     /// <summary>
-    /// Логика взаимодействия для Field.xaml
+    /// форма управления полем
     /// </summary>
-    public partial class Field
+    public partial class FieldControl
     {
-        ControlWindows _controlForm;
-        FieldSet _field;
-        PermissionDel permission;
+        ControlWindows _controlWin; //родительсая форма 
+        Logic.Action _action; //класс управления
+        Field _field; //форма поля
+        AlgorithmSettings _algorithmNow; //рабочий алгоритм
 
-        Timer _stepTimer;
+        Timer _stepTimer; //таймер
 
-        List<AlgorithmSettings> _algorithms;
-        AlgorithmSettings _algorithmNow;
+        bool _isTimerEnabled; //включённось таймера
 
-        FileClass _fileWork;
-        Logic.Action _action;
-        CreateAlg _createAlg;
+        int _step; //шаг
 
-        int _step;
-
-        bool isTimerEnabled;
-
-        public Field(ControlWindows controlForm)
+        public FieldControl(AlgorithmSettings algorithmNow, ControlWindows controlWin, int colv)
         {
             InitializeComponent();
 
-            _controlForm = controlForm;
+            _field = new Field(algorithmNow, colv);
 
-            _stepTimer = new Timer(TimerTick, null, 0, 150); //таймер
+            _algorithmNow = algorithmNow;
 
-            _fileWork = new FileClass(); //класс работы с файлами
-            _action = new Logic.Action(); //класс управления
-
-            UpdateAlgoBox();
+            _controlWin = controlWin;
+            _controlWin.CreateFieldShow(this);
+            _controlWin.FieldShow(_field);
 
             Speed.Value = 0.5;
 
-            isTimerEnabled = false;
-        }
+            _action = new Logic.Action();
+            _stepTimer = new Timer(TimerTick, null, 0, 150); //таймер
 
-        void UpdateAlgoBox()
-        {
-            _algorithms = new List<AlgorithmSettings>();
-            _algorithms = _fileWork.Readalgorithms();
+            _isTimerEnabled = false;
 
-            AlgoBox.Items.Clear();
+            _step = 1;
 
-            for (int i = 0; i < _algorithms.Count; i++)
+            Title = "Управление алг: " + algorithmNow.algName + "(" + colv + ")";
+
+            for (int i = 0; i < algorithmNow.commands.Count; i++)
             {
-                AlgoBox.Items.Add(_algorithms[i].algName);
+                AlgView.Items.Add(algorithmNow.commands[i]);
             }
+
+            DockableStyle = AvalonDock.DockableStyle.Single;
         }
 
-        
 
-        void TimerTick(object state)
-        {
-            if (isTimerEnabled == true)
-            {
-                Dispatcher.BeginInvoke(new ThreadStart(delegate
-                {
-                    RobotActive();
-                }));
-            }
-        }
 
         private void Step_Click(object sender, RoutedEventArgs e)
         {
@@ -86,8 +69,9 @@ namespace Robot.Form
         {
             try
             {
-                if (_step >= 0)
+                if (_step > 0)
                 {
+                    AlgView.SelectedIndex = _step;
                     _step = _action.Doing(_step, _algorithmNow);
 
                     if (_algorithmNow.robot.row >= _algorithmNow.field.countGridX || _algorithmNow.robot.column >= _algorithmNow.field.countGridY)
@@ -96,72 +80,19 @@ namespace Robot.Form
                     }
 
                     _field.FieldUpdate();
-                    
-                    
                 }
                 else
                 {
-                    isTimerEnabled = false;
+                    _isTimerEnabled = false;
                     MessageBox.Show("Алгоритм завершён.");
                 }
             }
             catch (Exception)
             {
-                isTimerEnabled = false;
+                _isTimerEnabled = false;
                 MessageBox.Show("Ошибка алгоритма!", "Внимание!");
-                
+
             }
-
-        }
-
-        private void Start_Click(object sender, RoutedEventArgs e)
-        {
-            if (AlgoBox.SelectedIndex != -1)
-            {
-                int k = AlgoBox.SelectedIndex;
-
-                UpdateAlgoBox();
-
-                AlgoBox.SelectedIndex = k;
-
-                _algorithmNow = _algorithms.Where(x => x.algName == AlgoBox.Items[k]).First();
-
-                Mod.IsEnabled = true;
-                Step.IsEnabled = true;
-                isTimerEnabled = false;
-
-                _step = 0;
-
-
-                _field = new FieldSet(_algorithmNow);
-                
-                _controlForm.CreateField(_field);  
-            }
-        }
-
-        private void Mod_Click(object sender, RoutedEventArgs e)
-        {
-            
-            if (isTimerEnabled == true)
-            {
-                isTimerEnabled = false;
-                Mod.Content = "Пошагово Вкл.";
-            }
-            else if (isTimerEnabled == false)
-            {
-                isTimerEnabled = true;
-                Mod.Content = "Пошагово Выкл.";
-                }
-        }
-
-        private void AlgoCreate_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateAlgoBox();
-
-            _createAlg = new CreateAlg(_fileWork, null);
-            _createAlg.ShowDialog();
-
-            UpdateAlgoBox();
         }
 
         private void Speed_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
@@ -169,33 +100,35 @@ namespace Robot.Form
             _stepTimer.Change(0, Convert.ToInt32(300 * (1.1 - Speed.Value)));
         }
 
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        void TimerTick(object state)
         {
-            Close();
-        }
-
-        private void AlgoRedact_Click(object sender, RoutedEventArgs e)
-        {
-            if (AlgoBox.SelectedIndex != -1)
+            if (_isTimerEnabled == true)
             {
-                _createAlg = new CreateAlg(_fileWork, _algorithms.Where(x => x.algName == AlgoBox.Items[AlgoBox.SelectedIndex]).First());
-                _createAlg.ShowDialog();
-
-                UpdateAlgoBox();
-            }
-        }
-
-        private void Del_Click(object sender, RoutedEventArgs e)
-        {
-            if (AlgoBox.SelectedIndex != -1)
-            {
-                permission = new PermissionDel();
-                if (permission.ShowDialog() == true)
+                Dispatcher.BeginInvoke(new ThreadStart(delegate
                 {
-                    _fileWork.DelAlgorithm(AlgoBox.Items[AlgoBox.SelectedIndex] as string);
-                    UpdateAlgoBox();
-                }
+                    RobotActive();
+                }));
             }
+        }
+
+        private void Mod_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (_isTimerEnabled == true)
+            {
+                _isTimerEnabled = false;
+                Mod.Content = "Пошагово";
+            }
+            else if (_isTimerEnabled == false)
+            {
+                _isTimerEnabled = true;
+                Mod.Content = "Автоматически";
+            }
+        }
+
+        private void FieldVis_Click(object sender, RoutedEventArgs e)
+        {
+            _controlWin.FieldShow(_field);
         }
     }
 }

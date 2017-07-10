@@ -1,0 +1,21 @@
+﻿<ad:DockableContent x:Class="Robot.Form.AlgorinthmsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                     mc:Ignorable="d" d:DesignHeight="370" d:DesignWidth="200" Title="Панель алгоритма">
+    <Grid>
+        <Grid Background="White">
+            <StackPanel Margin="25" VerticalAlignment="Top">
+                <Label Content="Алгоритм" HorizontalContentAlignment="Center"/>
+                <ComboBox Name ="AlgoBox" Height="25" Margin="0,5"/>
+                <Button Name ="Start"  Content="Запустить" Height="25" Click="Start_Click" Margin="0,5"/>
+                <Button Name ="AlgoRedact"  Content="Редактировать алгоритм" Height="25" Click="AlgoRedact_Click" Margin="0,5"/>
+                <Button Name ="AlgoCreate"  Content="Создать алгоритм" Height="25" Click="AlgoCreate_Click" Margin="0,5"/>
+                <Button Name="Del"  Height="25" VerticalAlignment="Top" Content="Удалить алгоритм" Click="Del_Click" Margin="0,5"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+    </ad:DockableContent>

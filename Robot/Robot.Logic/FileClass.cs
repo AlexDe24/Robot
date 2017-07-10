@@ -44,6 +44,45 @@ namespace Robot.Logic
         /// <summary>
         /// Функция чтение алгоритма из файла
         /// </summary>
+        /// <param name="algorithmName">название алгоритма</param>
+        /// <returns>алгоритм</returns>
+        public AlgorithmSettings Readalgorithm(string algorithmName)
+        {
+            AlgorithmSettings algorithm = new AlgorithmSettings();
+
+            StreamReader read = new StreamReader(@"Алгоритмы\" + algorithmName + ".txt", System.Text.Encoding.Default);
+
+            algorithm.algName = read.ReadLine();
+
+            string[] sp = read.ReadLine().Split('|');
+
+            algorithm.field.countGridX = Convert.ToInt32(sp[0]);
+            algorithm.field.countGridY = Convert.ToInt32(sp[1]);
+            algorithm.robot.row = Convert.ToInt32(sp[2]);
+            algorithm.robot.column = Convert.ToInt32(sp[3]);
+            algorithm.robot.rotate = sp[4];
+
+            while (!read.EndOfStream)
+            {
+                string[] spli = read.ReadLine().Split('|');
+
+                algorithm.commands.Add(new Commands
+                {
+                    nom = Convert.ToInt32(spli[0]),
+                    name = spli[1],
+                    firstArg = spli[2],
+                    secondArg = spli[3]
+                });
+            }
+
+            read.Close();
+
+            return algorithm;
+        }
+
+        /// <summary>
+        /// Функция чтение алгоритмов из файла
+        /// </summary>
         /// <returns>алгоритм</returns>
         public List<AlgorithmSettings> Readalgorithms()
         {

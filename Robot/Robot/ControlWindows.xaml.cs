@@ -8,33 +8,53 @@ using System.Collections.Generic;
 namespace Robot.Form
 {
     /// <summary>
-    /// Логика взаимодействия для ControlWindows.xaml
+    /// Родительская форма
     /// </summary>
     public partial class ControlWindows : Window
     {
-        
+        AlgorinthmsControl _control; //класс управления алгоритмами
 
         public ControlWindows()
         {
             InitializeComponent();
 
-            CreateControl();
+            ControlShow();
         }
 
-        private void CreateControl()
+        private void ControlShow()
         {
-            Field control = new Field(this);
+            _control = new AlgorinthmsControl(this);
 
-            control.Show(DockManager);
-            control.Activate();            
+            _control.Show(DockManager);
+            //_control.Activate();            
         }
 
-        public void CreateField(FieldSet fields)
+        public void CreateFieldShow(FieldControl fieldControl)
         {
-            fields.CreateField();
+            fieldControl.Show(DockManager);
+            //fieldControl.Activate();
+        }
 
-            fields.Show(DockManager);
-            fields.Activate();
+        public void FieldShow(Field field)
+        {
+            field.Show(DockManager);
+            //field.Activate();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            _control.Show(DockManager);
+            _control.Activate();
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            _control.AlgoCreate_Click(null,null);
         }
     }
 }
