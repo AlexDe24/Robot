@@ -46,7 +46,7 @@ namespace Robot.Logic
         /// </summary>
         /// <param name="algorithmName">название алгоритма</param>
         /// <returns>алгоритм</returns>
-        public AlgorithmSettings Readalgorithm(string algorithmName)
+        public AlgorithmSettings ReadAlgorithm(string algorithmName)
         {
             AlgorithmSettings algorithm = new AlgorithmSettings();
 
@@ -84,7 +84,7 @@ namespace Robot.Logic
         /// Функция чтение алгоритмов из файла
         /// </summary>
         /// <returns>алгоритм</returns>
-        public List<AlgorithmSettings> Readalgorithms()
+        public List<AlgorithmSettings> ReadAlgorithms()
         {
             List<AlgorithmSettings> algorithms = new List<AlgorithmSettings>();
 

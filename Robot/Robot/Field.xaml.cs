@@ -57,7 +57,6 @@ namespace Robot.Form
             DataContext = this;
         }
 
-
         public void FieldUpdate()
         {
             for (int i = 0; i < _algorithmNow.field.countGridX; i++)
@@ -73,6 +72,11 @@ namespace Robot.Form
                 }
             }
 
+            RobotUpdate();
+        }
+
+        void RobotUpdate()
+        {
             switch (_algorithmNow.robot.rotate)
             {
                 case "Направо":
@@ -107,24 +111,7 @@ namespace Robot.Form
 
             _robot = new Image();
 
-            switch (_algorithmNow.robot.rotate)
-            {
-                case "Направо":
-                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotRight.PNG"));
-                    break;
-                case "Вверх":
-                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotTop.PNG"));
-                    break;
-                case "Налево":
-                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotLeft.PNG"));
-                    break;
-                case "Вниз":
-                    _robot.Source = new BitmapImage(new Uri(@"C:\Программы\Robot\Robot\Robot\Resources\RobotBot.PNG"));
-                    break;
-                default:
-                    break;
-            }
-            
+            RobotUpdate();
 
             for (int i = 0; i < _algorithmNow.field.countGridX; i++)
             {
@@ -177,9 +164,6 @@ namespace Robot.Form
             }
 
             MainGrid.Children.Add(_robot);
-
-            Grid.SetRow(_robot, _algorithmNow.robot.row);
-            Grid.SetColumn(_robot, _algorithmNow.robot.column);
         }
     }
 }

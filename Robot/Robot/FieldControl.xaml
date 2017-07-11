@@ -5,24 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                     mc:Ignorable="d" d:DesignHeight="370" d:DesignWidth="250">
+                     mc:Ignorable="d" d:DesignHeight="370" d:DesignWidth="250" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
     <Grid>
         <Grid Background="White">
 
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="1.5*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
             <StackPanel Margin="5" Grid.Row="0">
                 <Label Content="Режим" HorizontalAlignment="Center" Height="25" Margin="0,5,0,0"/>
-                <ToggleButton Name ="Mod"  Content="Пошагово" Height="25" Click="Mod_Click"/>
+                <ToggleButton Name ="Mod"  Content="Автоматически" Height="25" Click="Mod_Click"/>
                 <Button Name ="Step"  Content="Шаг" Height="25" Click="Step_Click"/>
 
                 <Label Content="Скорость робота" HorizontalAlignment="Center" Height="25" Margin="0,5,0,0"/>
                 <ScrollBar Name="Speed" Orientation="Horizontal" Scroll="Speed_Scroll"/>
 
                 <Button Name ="FieldVis"  Content="Показать поле" Height="25" Margin="0,5,0,0" Click="FieldVis_Click"/>
+                <Button Name ="Restart"  Content="Обновить" Height="25" Margin="0,5,0,0" Click="Restart_Click"/>
 
             </StackPanel>
 

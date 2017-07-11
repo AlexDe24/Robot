@@ -15,12 +15,12 @@
 
         <Menu Height="25" VerticalAlignment="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать алгоритм" Click="MenuItem_Click_2" ></MenuItem>
+                <MenuItem Name="CreateAlg" Header="Создать алгоритм" Click="CreateAlg_Click"></MenuItem>
                 <Separator />
-                <MenuItem Header="Выход" Click="MenuItem_Click"/>
+                <MenuItem Name="Exit" Header="Выход" Click="Exit_Click"/>
             </MenuItem>
             <MenuItem Header="Вид">
-                <MenuItem Header="Панель алгоритма" Click="MenuItem_Click_1"/>
+                <MenuItem Name="AlgPanel" Header="Панель алгоритма" Click="AlgPanel_Click"/>
             </MenuItem>
         </Menu>
     </Grid>

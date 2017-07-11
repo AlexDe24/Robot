@@ -16,7 +16,8 @@ namespace Robot.Form
     /// </summary>
     public partial class FieldControl
     {
-        ControlWindows _controlWin; //родительсая форма 
+        FileClass _fileWork; //класс работы с файлами
+        ControlWindows _controlWindow; //родительсая форма 
         Logic.Action _action; //класс управления
         Field _field; //форма поля
         AlgorithmSettings _algorithmNow; //рабочий алгоритм
@@ -26,39 +27,49 @@ namespace Robot.Form
         bool _isTimerEnabled; //включённось таймера
 
         int _step; //шаг
+        int _colv; //номер окна
+        string _algorithmNowName; //название уровня
 
-        public FieldControl(AlgorithmSettings algorithmNow, ControlWindows controlWin, int colv)
+        public FieldControl(string algorithmNowName, FileClass fileWork, ControlWindows controlWindow, int colv)
         {
             InitializeComponent();
 
-            _field = new Field(algorithmNow, colv);
-
-            _algorithmNow = algorithmNow;
-
-            _controlWin = controlWin;
-            _controlWin.CreateFieldShow(this);
-            _controlWin.FieldShow(_field);
+            _fileWork = fileWork;
+            _controlWindow = controlWindow;
+            _algorithmNowName = algorithmNowName;
 
             Speed.Value = 0.5;
+            _isTimerEnabled = false;
+            _colv = colv;
 
             _action = new Logic.Action();
             _stepTimer = new Timer(TimerTick, null, 0, 150); //таймер
 
-            _isTimerEnabled = false;
+            Title = "Управление алг: " + _algorithmNowName + "(" + colv + ")";
 
-            _step = 1;
-
-            Title = "Управление алг: " + algorithmNow.algName + "(" + colv + ")";
-
-            for (int i = 0; i < algorithmNow.commands.Count; i++)
-            {
-                AlgView.Items.Add(algorithmNow.commands[i]);
-            }
+            Start();
 
             DockableStyle = AvalonDock.DockableStyle.Single;
         }
 
+        void Start()
+        {
+            _step = 1;
 
+            _algorithmNow = _fileWork.ReadAlgorithm(_algorithmNowName);
+
+            _field = new Field(_algorithmNow, _colv);
+                        
+            _controlWindow.CreateFieldShow(this);
+            _controlWindow.FieldShow(_field);
+
+            AlgView.Items.Clear();
+
+            for (int i = 0; i < _algorithmNow.commands.Count; i++)
+            {
+                AlgView.Items.Add(_algorithmNow.commands[i]);
+            }
+        }
 
         private void Step_Click(object sender, RoutedEventArgs e)
         {
@@ -117,18 +128,24 @@ namespace Robot.Form
             if (_isTimerEnabled == true)
             {
                 _isTimerEnabled = false;
-                Mod.Content = "Пошагово";
+                Mod.Content = "Автоматически";
             }
             else if (_isTimerEnabled == false)
             {
                 _isTimerEnabled = true;
-                Mod.Content = "Автоматически";
+                Mod.Content = "Пошагово";
             }
         }
 
         private void FieldVis_Click(object sender, RoutedEventArgs e)
         {
-            _controlWin.FieldShow(_field);
+            _controlWindow.FieldShow(_field);
+        }
+
+        private void Restart_Click(object sender, RoutedEventArgs e)
+        {
+            _field.Close();
+            Start();
         }
     }
 }

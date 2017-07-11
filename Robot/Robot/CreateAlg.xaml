@@ -29,11 +29,11 @@
                 <TextBox Height="20"  Name="AlgName" Width="150"/>
 
                 <Label Content="Размер поля по X" HorizontalContentAlignment="Center"/>
-                <TextBox  Height="20" Name="FieldSizeX" Width="150"/>
+                <TextBox  Height="20" Name="FieldSizeY" Width="150"/>
 
                 <Label Content="Размер поля по Y" HorizontalContentAlignment="Center"/>
-                <TextBox  Height="20" Name="FieldSizeY" Width="150"/>
-                
+                <TextBox  Height="20" Name="FieldSizeX" Width="150"/>
+               
                 <Label Content="Начальное положение робота по X" HorizontalContentAlignment="Center"/>
                 <TextBox Height="20" Name="RoborColumn" Width="150"/>
 

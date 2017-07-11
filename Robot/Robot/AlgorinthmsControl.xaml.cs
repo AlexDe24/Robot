@@ -44,7 +44,7 @@ namespace Robot.Form
             int index = AlgoBox.SelectedIndex;
 
             _algorithms = new List<AlgorithmSettings>();
-            _algorithms = _fileWork.Readalgorithms();
+            _algorithms = _fileWork.ReadAlgorithms();
 
             AlgoBox.Items.Clear();
 
@@ -62,7 +62,7 @@ namespace Robot.Form
             {
                 _colv++;
 
-                _fieldControl = new FieldControl(_fileWork.Readalgorithm(AlgoBox.Items[AlgoBox.SelectedIndex] as string), _controlWin, _colv);
+                _fieldControl = new FieldControl((AlgoBox.Items[AlgoBox.SelectedIndex] as string), _fileWork, _controlWin, _colv);
             }
         }
 
